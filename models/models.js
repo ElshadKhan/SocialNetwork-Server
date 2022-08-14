@@ -15,11 +15,11 @@ const Post = sequelize.define( 'post', {
   picture: {type: DataTypes.STRING, allowNull: false},
   userlogin: {type: DataTypes.STRING},
 });
-
+ 
 // (async () => {
 //   await User.sync({ force: true });
 //   // Code here
-// })();       
+// })();        
   
 User.hasMany(Post) 
 Post.belongsTo(User)

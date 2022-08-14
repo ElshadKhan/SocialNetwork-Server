@@ -17,7 +17,7 @@ class PostController {
         let username1 = username[0][0]
         username1.content = content;
         username1.picture = fileName;
-        console.log(username1)
+        console.log(username1) 
         const post = await Post.create({content, picture: fileName, userId, userlogin: username1.username});
         return res.json(username1) 
       } catch (error) { 
@@ -35,9 +35,12 @@ class PostController {
         const posts = await Post.findAll()
         return res.json(posts)
     } 
-    // async getUserPosts (req, res) {
-
-    // }
+    async getAllUserPosts (req, res) {
+        const {id} = req.params
+        const posts = await Post.findAll({where: {userId: id}})
+        console.log('posts', posts) 
+        return res.json(posts)  
+    }
     // async getOnePost (req, res) {
 
     // }

@@ -4,6 +4,7 @@ const PostController = require('../controller/postController.js')
 const authMiddleware = require('../middleware/authMiddleware')
 
 router.post('/create', PostController.createPost)
-router.get('/find', PostController.getAllPosts)
+router.get('/findAllPosts', PostController.getAllPosts)
+router.get('/findAllUserPosts/:id', PostController.getAllUserPosts)
 
-module.exports = router
+module.exports = router 

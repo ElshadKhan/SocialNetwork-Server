@@ -3,6 +3,7 @@ const { User } = require("../models/models.js");
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
 const { condition } = require('sequelize');
+const { user } = require('pg/lib/defaults.js');
 
 const generateJwt = (id, email, username, role) => {
     return jwt.sign(
@@ -32,6 +33,7 @@ class UserController {
                 return res.json({token})   
     }
     async login(req, res, next) {
+            console.log('req.body',req.body)
             const {email, password} = req.body
             const user = await User.findOne({where: {email}})
             if (!user) {
@@ -48,6 +50,21 @@ class UserController {
              const token = generateJwt(req.user.email, req.user.password, req.user.role)
                  return res.json({token})  
     }
+    async deleteUser(req, res) {
+        const {id} = req.params
+        const user = await User.destroy({where: {id}})
+        return res.json('User deleted')  
+    }  
+    async updateUserLogin(req, res, next) {
+        const {username} = req.body 
+            const candidate = await User.findOne({where: {username}})
+            if (candidate) {
+                return next(ApiError.badRequest('Пользователь с таким login уже существует'))
+            }
+            const user = await User.update({username: 'updated'}, {where: {id}}) 
+            const token = generateJwt(user.id, user.email, user.username, user.role)
+                return res.json({token})  
+    }  
 }
 
 module.exports = new UserController();
