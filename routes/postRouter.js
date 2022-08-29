@@ -3,8 +3,12 @@ const router = new Router();
 const PostController = require("../controller/postController.js");
 const authMiddleware = require("../middleware/authMiddleware");
 
-router.post("/create", PostController.createPost);
-router.get("/findAllPosts", PostController.getAllPosts);
-router.get("/findAllUserPosts/:id", PostController.getAllUserPosts);
+router.post("/create", authMiddleware, PostController.createPost);
+router.get("/findAllPosts", authMiddleware, PostController.getAllPosts);
+router.get(
+  "/findAllUserPosts/:id",
+  authMiddleware,
+  PostController.getAllUserPosts
+);
 
 module.exports = router;

@@ -1,7 +1,8 @@
 const ApiError = require("../error/ApiError.js");
 const uuid = require("uuid");
 const path = require("path");
-const { Post, User } = require("../models/models");
+const { User } = require("../models/models");
+const { Post } = require("../models/models");
 
 class PostController {
   async createPost(req, res, next) {
@@ -16,17 +17,25 @@ class PostController {
       next(ApiError.badRequest(error.massage));
     }
   }
-  async getAllPosts(req, res) {
-    const posts = await Post.findAll({ include: [User] });
-    return res.json(posts);
+  async getAllPosts(req, res, next) {
+    try {
+      const posts = await Post.findAll({ include: [User] });
+      return res.json(posts);
+    } catch (error) {
+      next(ApiError.badRequest(error.massage));
+    }
   }
-  async getAllUserPosts(req, res) {
-    const { id } = req.params;
-    const posts = await Post.findAll({
-      include: [User],
-      where: { user_id: id },
-    });
-    return res.json(posts);
+  async getAllUserPosts(req, res, next) {
+    try {
+      const { id } = req.params;
+      const posts = await Post.findAll({
+        include: [User],
+        where: { user_id: id },
+      });
+      return res.json(posts);
+    } catch (error) {
+      next(ApiError.badRequest(error.massage));
+    }
   }
 }
 
